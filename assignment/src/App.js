@@ -1,32 +1,35 @@
-import React,{useState} from "react";
-import "./App.css";
+import React,{useState,useRef,useEffect} from 'react';
+import './App.css';
 
- function App() {
 
-  const[count,setCount]=useState(0);
-
-const IncrementCounter=()=>
+function App()
 {
-  setCount(count +1);
-  console.log("clicking");
 
+const[counter,setCounter]=useState(0);
+const myRef=useRef(false);
+
+useEffect(()=>
+  {
+    document.addEventListener('click',incrementCounter);
+    return ()=> document.removeEventListener('click',incrementCounter);
+  });
+
+const incrementCounter=(e)=>
+{
+  if(myRef.current.contains(e.target))
+  {
+    setCounter(counter + 1);
+  }
+  else
+  {
+    setCounter(counter - 1);
+  }
+  
 }
 
-const DecrementCounter=()=>
-{
-  setCount(count - 1);
-}
-
-
-  return (
-    <div className="outerWrapper" >
-      <h1>{count}</h1>
-      <div className="App">
-        <div className="innerDiv" onClick={IncrementCounter}>click</div>
-        <div className="outerDiv" onClick={DecrementCounter}></div>
-      </div>
-    </div>
-  );
+  return(
+    <div className="innerDiv" onClick={incrementCounter} ref={myRef}>{counter}</div>
+  )
 }
 
 export default App;
